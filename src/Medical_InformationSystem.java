@@ -1,7 +1,18 @@
 import java.util.*;
+
 public class Medical_InformationSystem {
+
+    /**
+     * Logs in a user based on their role (Patient, Doctor, or Nurse).
+     * Prompts for the user's ID, Name, and Age, and returns the corresponding user object.
+     *
+     * role The role of the user (Patient, Doctor, or Nurse).
+     * throws IllegalArgumentException if an invalid role is provided.
+     */
     public static User login(String role) {
         Scanner scanner = new Scanner(System.in);
+
+        // Gather user information (ID, Name, and Age)
         System.out.print("ID: ");
         String id = scanner.nextLine();
         System.out.print("Name: ");
@@ -10,6 +21,7 @@ public class Medical_InformationSystem {
         int age = scanner.nextInt();
         scanner.nextLine();  // Consume newline
 
+        // Create and return the appropriate user based on the role
         if (role.equalsIgnoreCase("Patient")) {
             return new Patient(id, name, age);
         } else if (role.equalsIgnoreCase("Doctor")) {
@@ -23,14 +35,22 @@ public class Medical_InformationSystem {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
+        // Welcome message for the system
         System.out.println("Welcome to the Medical Information System");
+
+        // Prompt the user for their role
         System.out.print("Login as (Patient/Doctor/Nurse): ");
         String role = scanner.nextLine();
+
+        // Call login method to authenticate the user
         User user = login(role);
 
+        // Handle actions for Patient users
         if (user instanceof Patient) {
             Patient patient = (Patient) user;
             while (true) {
+                // Display available options for the Patient
                 System.out.println("\n1. View Test Results");
                 System.out.println("2. View Prescriptions");
                 System.out.println("3. View Billing Info");
@@ -38,6 +58,7 @@ public class Medical_InformationSystem {
                 System.out.print("Enter choice: ");
                 String choice = scanner.nextLine();
 
+                // Execute the action based on the choice
                 switch (choice) {
                     case "1":
                         patient.viewTestResults();
@@ -55,15 +76,19 @@ public class Medical_InformationSystem {
                         System.out.println("Invalid choice");
                 }
             }
-        } else if (user instanceof Doctor) {
+        }
+        // Handle actions for Doctor users
+        else if (user instanceof Doctor) {
             Doctor doctor = (Doctor) user;
             while (true) {
+                // Display available options for the Doctor
                 System.out.println("\n1. Add Patient");
                 System.out.println("2. Choose Patient");
                 System.out.print("Enter choice: ");
                 String choice = scanner.nextLine();
 
                 if (choice.equals("1")) {
+                    // Add a new patient for the Doctor
                     System.out.print("Patient ID: ");
                     String patientId = scanner.nextLine();
                     System.out.print("Patient Name: ");
@@ -74,7 +99,8 @@ public class Medical_InformationSystem {
                     Patient patient = new Patient(patientId, patientName, patientAge);
                     doctor.addPatient(patient);
                 } else if (choice.equals("2")) {
-                    try{
+                    try {
+                        // Choose an existing patient and display patient-specific actions
                         Patient selectedPatient = doctor.choosePatient();
                         while (true) {
                             System.out.println("\n1. Create Prescription");
@@ -86,6 +112,7 @@ public class Medical_InformationSystem {
                             System.out.print("Enter choice: ");
                             String subChoice = scanner.nextLine();
 
+                            // Execute the action based on the choice
                             switch (subChoice) {
                                 case "1":
                                     doctor.createPrescription(selectedPatient);
@@ -109,7 +136,8 @@ public class Medical_InformationSystem {
                                     System.out.println("Invalid choice");
                             }
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
+                        // Handle case where a non-existing patient is selected
                         e.printStackTrace();
                         System.out.println("Non existing Patient!");
                     }
@@ -117,15 +145,19 @@ public class Medical_InformationSystem {
                     System.out.println("Invalid choice");
                 }
             }
-        } else if (user instanceof Nurse) {
+        }
+        // Handle actions for Nurse users
+        else if (user instanceof Nurse) {
             Nurse nurse = (Nurse) user;
             while (true) {
+                // Display available options for the Nurse
                 System.out.println("\n1. Add Patient");
                 System.out.println("2. Choose Patient");
                 System.out.print("Enter choice: ");
                 String choice = scanner.nextLine();
 
                 if (choice.equals("1")) {
+                    // Add a new patient for the Nurse
                     System.out.print("Patient ID: ");
                     String patientId = scanner.nextLine();
                     System.out.print("Patient Name: ");
@@ -137,6 +169,7 @@ public class Medical_InformationSystem {
                     nurse.addPatient(patient);
                 } else if (choice.equals("2")) {
                     try {
+                        // Choose an existing patient and display patient-specific actions
                         Patient selectedPatient = nurse.choosePatient();
                         while (true) {
                             System.out.println("\n1. View Test Results");
@@ -146,6 +179,7 @@ public class Medical_InformationSystem {
                             System.out.print("Enter choice: ");
                             String subChoice = scanner.nextLine();
 
+                            // Execute the action based on the choice
                             switch (subChoice) {
                                 case "1":
                                     nurse.viewTestResults(selectedPatient);
@@ -163,7 +197,8 @@ public class Medical_InformationSystem {
                                     System.out.println("Invalid choice");
                             }
                         }
-                    } catch (Exception e){
+                    } catch (Exception e) {
+                        // Handle case where a non-existing patient is selected
                         e.printStackTrace();
                         System.out.println("Non existing Patient!");
                     }
